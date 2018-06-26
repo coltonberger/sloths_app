@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const knex = require('./knex');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -21,6 +22,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+
+
+app.get('/sloths', (req, res, next) => {
+  console.log('ROUTE WAS HIT');
+  // Return some actual sloths
+  knex('sloths')
+  .then((results) => {
+    res.send(results)
+  })
+})
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
